@@ -14,14 +14,12 @@ type CountsSuite struct {
 	DB     *dmock.Treap
 	Counts *Counts
 	AnyInt mock.AnythingOfTypeArgument
-	AnyKV  mock.AnythingOfTypeArgument
 }
 
 func (suite *CountsSuite) SetupTest() {
 	suite.DB = &dmock.Treap{}
 	suite.Counts = &Counts{DB: suite.DB}
 	suite.AnyInt = mock.AnythingOfType("int")
-	suite.AnyKV = mock.AnythingOfType("*data.KV")
 }
 
 func (suite *CountsSuite) TestInitCountOnAppendIfCountIsNil() {

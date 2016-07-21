@@ -16,7 +16,6 @@ type TransactionSuite struct {
 	Counts *amock.Counts
 	Tact   *Transaction
 	AnyInt mock.AnythingOfTypeArgument
-	AnyKV  mock.AnythingOfTypeArgument
 }
 
 func (suite *TransactionSuite) SetupTest() {
@@ -24,7 +23,6 @@ func (suite *TransactionSuite) SetupTest() {
 	suite.Counts = &amock.Counts{}
 	suite.Tact = &Transaction{DB: suite.DB, Counts: suite.Counts}
 	suite.AnyInt = mock.AnythingOfType("int")
-	suite.AnyKV = mock.AnythingOfType("*data.KV")
 }
 
 func (suite *TransactionSuite) TestCopy() {
