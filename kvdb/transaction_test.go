@@ -44,7 +44,7 @@ func (suite *TransactionSuite) TestGetExistingKV() {
 func (suite *TransactionSuite) TestGetNilKV() {
 	suite.DB.On("Get", &data.KV{K: "A"}).Return(nil)
 
-	suite.Nil(suite.Tact.Get("A"))
+	suite.Equal("NULL", suite.Tact.Get("A"))
 }
 
 func (suite *TransactionSuite) TestUnsetNilKV() {

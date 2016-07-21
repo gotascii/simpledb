@@ -19,12 +19,12 @@ func (t *Transaction) Copy() *Transaction {
 	}
 }
 
-func (t *Transaction) Get(k string) interface{} {
+func (t *Transaction) Get(k string) string {
 	p := t.DB.Get(&data.KV{K: k})
 	if p != nil {
-		return p.V
+		return p.V.(string)
 	}
-	return nil
+	return "NULL"
 }
 
 func (t *Transaction) Set(k string, v string) {
