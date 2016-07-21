@@ -3,24 +3,25 @@ package kvdb
 import (
 	"testing"
 
-	"github.com/gotascii/simpledb/aggregate"
+	amock "github.com/gotascii/simpledb/aggregate/mock"
 	"github.com/gotascii/simpledb/data"
+	dmock "github.com/gotascii/simpledb/data/mock"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
 type TransactionSuite struct {
 	suite.Suite
-	DB     *data.MockTreap
-	Counts *aggregate.MockCounts
+	DB     *dmock.Treap
+	Counts *amock.Counts
 	Tact   *Transaction
 	AnyInt mock.AnythingOfTypeArgument
 	AnyKV  mock.AnythingOfTypeArgument
 }
 
 func (suite *TransactionSuite) SetupTest() {
-	suite.DB = &data.MockTreap{}
-	suite.Counts = &aggregate.MockCounts{}
+	suite.DB = &dmock.Treap{}
+	suite.Counts = &amock.Counts{}
 	suite.Tact = &Transaction{DB: suite.DB, Counts: suite.Counts}
 	suite.AnyInt = mock.AnythingOfType("int")
 	suite.AnyKV = mock.AnythingOfType("*data.KV")
@@ -56,7 +57,7 @@ func (suite *TransactionSuite) TestDeleteFromDBOnUnsetKV() {
 	suite.Counts.On("Remove", "1", 1)
 	suite.DB.On("Get", &data.KV{K: "A"}).Return(&data.KV{"A", "1"})
 
-	expected := &data.MockTreap{}
+	expected := &dmock.Treap{}
 	suite.DB.On("Delete", &data.KV{"A", "1"}).Return(expected)
 
 	suite.Tact.Unset("A")
@@ -88,7 +89,7 @@ func (suite *TransactionSuite) TestUpsertDBOnSetIfKVIsNil() {
 	suite.Counts.On("Append", "1", 1)
 
 	suite.DB.On("Get", &data.KV{K: "A"}).Return(nil)
-	expected := &data.MockTreap{}
+	expected := &dmock.Treap{}
 	suite.DB.On("Upsert", &data.KV{"A", "1"}, suite.AnyInt).Return(expected)
 
 	suite.Tact.Set("A", "1")
@@ -102,7 +103,7 @@ func (suite *TransactionSuite) TestUpsertDBOnSetIfKVIsUpdated() {
 	suite.Counts.On("Remove", "1", 1)
 
 	suite.DB.On("Get", &data.KV{K: "A"}).Return(&data.KV{"A", "1"})
-	expected := &data.MockTreap{}
+	expected := &dmock.Treap{}
 	suite.DB.On("Upsert", &data.KV{"A", "2"}, suite.AnyInt).Return(expected)
 
 	suite.Tact.Set("A", "2")
