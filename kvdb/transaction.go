@@ -27,12 +27,12 @@ func (t *Transaction) Get(k string) interface{} {
 	return nil
 }
 
-func (t *Transaction) Set(k string, v interface{}) {
+func (t *Transaction) Set(k string, v string) {
 	kv := t.DB.Get(&data.KV{K: k})
 
 	if kv == nil || kv.V != v {
 		t.DB = t.DB.Upsert(&data.KV{k, v}, rand.Int())
-		t.Counts.Append(v.(string), 1)
+		t.Counts.Append(v, 1)
 	}
 
 	if kv != nil && kv.V != v {
